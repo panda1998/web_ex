@@ -1,0 +1,33 @@
+pipeline {
+    agent any
+
+	tools {
+		jdk "Java-1.8"
+		maven "Maven-3_5_0"
+	}
+
+    stages {
+        stage('Clone sources'){
+            steps {
+                git url: 'git 'https://github.com/panda1998/web_ex'
+            }
+        }
+      }
+     	stage('SonarQube analysis') {
+	     steps {
+		//Prepare SonarQube scanner enviornment
+		withSonarQubeEnv('sonarqube -7.4') {
+		    sh ' \'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:2.8.1:sonar\'' 
+		}
+	      }
+	}
+  stage('Execute Maven') {
+		steps {
+		   script {
+		
+		    sh 'mvn clean package'
+			}
+		}
+	}
+ }
+ }
