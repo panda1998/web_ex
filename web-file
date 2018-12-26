@@ -5,15 +5,7 @@ pipeline {
 		jdk "Java-1.8"
 		maven "Maven"
 	}
-
-    stages {
-        stage('Clone sources'){
-            steps {
-                git url: 'git 'https://github.com/panda1998/web_ex'
-            }
-        }
-      }
-     	stage('SonarQube analysis') {
+        stage('SonarQube analysis') {
 	     steps {
 		//Prepare SonarQube scanner enviornment
 		withSonarQubeEnv('sonarqube -7.4') {
