@@ -5,12 +5,7 @@ pipeline {
 		maven "maven-3.5.0"
 	}
 	stages{
-	 stage('scm'){
-	  steps(
-	   git 'https://github.com/SonarSource/sonarqube'
-	   }
-	   }
-	   stage('SonarQube analysis') {
+	  stage('SonarQube analysis') {
 	     steps {
 		//Prepare SonarQube scanner enviornment
 		withSonarQubeEnv('sonarqube-3.2.0') {
