@@ -5,8 +5,8 @@ pipeline {
 		maven "maven-3.5.0"
 	}
 	stages{
-	 stage('scm')
-	   { git 'https://github.com/SonarSource/sonarqube'
+	 stage('scm'){
+	   git 'https://github.com/SonarSource/sonarqube'
 	   }
 	   stage('SonarQube analysis') {
 	     steps {
