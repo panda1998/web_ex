@@ -19,11 +19,4 @@ pipeline {
 			}
 	}
  }
-      stage ('Deploy'){
-     steps {
-   sshagent(['93a50335-83c8-4b10-913a-42e55f063a31']) {
-    // some block
-}
-}
-	}
- }
+      }
