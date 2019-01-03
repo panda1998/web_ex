@@ -40,14 +40,14 @@ def scannerhome = tool 'sonar'
  steps {
    withSonarQubeEnv ('sonar') 
 {
-sh "${scannerhome}/bin/sonar-runner -D sonar.projectKey=app -D sonar.projectName=app -D sonar.projectVersion=1.0  -D sonar.web.host=sonar -D sonar.web.port=9000 -D sonar.sources=/var/lib/jenkins/workspace/deploy-aapserver/src -D sonar.java.binaries=/var/lib/jenkins/workspace/deploy-aapserver/app/target/classes -D sonar.url=http:/35.175.209.153/:9000/sonar"
+sh "${scannerhome}/bin/sonar-runner -D sonar.projectKey=app -D sonar.projectName=app -D sonar.projectVersion=1.0  -D sonar.web.host=sonar -D sonar.web.port=9000 -D sonar.sources=/var/lib/jenkins/workspace/deploy-application-server/src -D sonar.java.binaries=/var/lib/jenkins/workspace/deploy-application-server/app/target/classes -D sonar.url=http:/35.175.209.153/:9000/sonar"
    }
 }
 }
     stage ('Deploy-to -appserver'){
   steps {
-sshagent(['93a50335-83c8-4b10-913a-42e55f063a31']) {
-    sh  "scp -o StrictHostKeyChecking=no  target/*.war ubuntu@34.238.166.121:/opt/tomcat8/webapps"
+sshagent(['8a0740e7-4f4d-4398-b2ab-91b59d30a2ba']) {
+    sh  "scp -o StrictHostKeyChecking=no  target/*.war ubuntu@3.80.246.208:/opt/tomcat8/webapps"
       }
 	}
 	}
