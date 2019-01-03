@@ -1,0 +1,75 @@
+pipeline
+{
+   agent {label "master"}
+   
+    tools 
+     {
+     maven 'maven-3.5.0'
+     jdk 'jdk1.8'
+     }
+  stages
+   {
+   stage('Package'){
+    steps 
+     {
+        sh '''
+        echo "PATH = ${PATH}"
+       echo "M2_HOME = ${M2_HOME}"
+       '''
+       }}
+     
+      stage ('package-complie') {
+      
+            steps {
+                git "https://github.com/panda1998/my-app"
+                 sh 'mvn clean package'
+            }
+              post {
+                success {
+                    archiveArtifacts artifacts: '**/target/*.war', fingerprint: true
+                     junit '**/target/surefire-reports/*.xml' 
+                 }
+                }
+            }
+      
+     stage ('Sonar-Testing') {
+        
+environment {
+def scannerhome = tool 'sonar'
+    }
+ steps {
+   withSonarQubeEnv ('sonar') 
+{
+sh "${scannerhome}/bin/sonar-runner -D sonar.projectKey=app -D sonar.projectName=app -D sonar.projectVersion=1.0  -D sonar.web.host=sonar -D sonar.web.port=9000 -D sonar.sources=/var/lib/jenkins/workspace/deploy-aapserver/src -D sonar.java.binaries=/var/lib/jenkins/workspace/deploy-aapserver/app/target/classes -D sonar.url=http:/35.175.209.153/:9000/sonar"
+   }
+}
+}
+    stage ('Deploy-to -appserver'){
+  steps {
+sshagent(['93a50335-83c8-4b10-913a-42e55f063a31']) {
+    sh  "scp -o StrictHostKeyChecking=no  target/*.war ubuntu@34.238.166.121:/opt/tomcat8/webapps"
+      }
+	}
+	}
+    stage('Run JMeter Test') {
+        steps {
+        
+                sh '/bin/apache-jmeter-5.0/bin/jmeter.sh -n -t /bin/apache-jmeter-5.0/bin/ForEachTest2.jmx -l $WORKSPACE/build-result.jtl'
+            }
+        }
+	
+    stage('Email Notification'){
+   steps 
+   {
+      mail bcc: '', body: '''Hi Welcome to jenkins email alerts
+      Thanks
+      rashmi''', cc: '', from: '', replyTo: '', subject: 'Jenkins Job', to: 'pandarashmi212@gmail.com'
+   } }
+   stage('Notification'){ 
+    steps 
+    {
+    echo 'no alerts'
+       
+   }} 
+   }
+  }
