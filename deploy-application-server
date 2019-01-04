@@ -57,6 +57,10 @@ sshagent(['8a0740e7-4f4d-4398-b2ab-91b59d30a2ba']) {
         
                 sh '/bin/apache-jmeter-5.0/bin/jmeter.sh -n -t /bin/apache-jmeter-5.0/bin/ForEachTest2.jmx -l $WORKSPACE/build-result.jtl'
             }
+	    post {
+    success {
+  perfReport 'build-result.jtl'
+}}
         }
 	
     stage('Email Notification'){
