@@ -48,7 +48,7 @@ sh "${scannerhome}/bin/sonar-runner -D sonar.projectKey=app -D sonar.projectName
     stage ('Deploy-to -appserver'){
   steps {
 sshagent(['8a0740e7-4f4d-4398-b2ab-91b59d30a2ba']) {
-    sh  "scp -o StrictHostKeyChecking=no  target/*.war ubuntu@52.201.206.176:/opt/tomcat8/webapps"
+    sh  "scp -o StrictHostKeyChecking=no  target/*.war ubuntu@52.201.206.176:/opt/tomact8/webapps"
       }
      }
     }
